@@ -2,19 +2,19 @@
   "name": "sentry",
   "version": "1.2.0",
   "engines": {
-    "node": ">10.4.*"
+    "node": "10.*.*"
   },
   "description": "Project Description",
   "main": "src/index.js",
   "scripts": {
-    "start": "nf start api",
+    "start": "babel-node src/index.js",
+    "dev": "nf start api",
     "api": "nodemon --exec babel-node src/index.js",
     "test-prebuild": "git checkout master && npm version patch && git push",
     "build-vscode": "rm -rf dist/ && cross-env node_modules/.bin/babel src/ --ignore=src/__mocks__ --out-dir=dist --source-maps",
     "build": "babel src -d dist",
     "clean": "del dist logs src/logs",
     "clean:hard": "del dist node_modules",
-    "postbuild": "cp iisnode.yml Web.config package.json dist",
     "test": "jest --runInBand",
     "test:watch": "jest --watch",
     "smoketest": "echo 'Smoke Test not implemented'"
@@ -38,6 +38,8 @@
     "jest-junit-reporter": "^1.1.0",
     "mongoose": "^4.13.6",
     "morgan": "^1.9.0",
+    "now-env": "^3.1.0",
+    "smartcar": "^4.2.1",
     "unsplash-api": "^1.2.0",
     "winston": "^3.1.0",
     "winston-daily-rotate-file": "^3.5.1",

@@ -1,0 +1,13 @@
+{
+    "version": 1,
+    "name": "pdui-sentry",
+    "alias": "pdui-sentry",
+    "type": "npm",
+    "dotenv": true,
+    "scale": {
+        "sfo1": {
+            "min": 1,
+            "max": "auto"
+        }
+    }
+}

@@ -1,8 +1,8 @@
 import express from 'express';
 import log from '../logger';
-import { UserController } from './controllers';
+import { UserController, CarController } from './controllers';
 
-const temp = (req, res) => res.json({status: 'success', msg: 'Method not yet implemented'});
+const temp = (req, res) => res.json({status: 'success', msg: 'Method not yet implemented', data: req.data});
 const router = express.Router();
 
 router.map = routes => {
@@ -14,11 +14,14 @@ router.map = routes => {
 }
 
 router.map({
+  // '/healthcheck': {get: ''},
   '/user/:id': {
     get: UserController.findById,
-    post: ''
+    // post: ''
   },
-  '/healthcheck': {get: ''}
+  '/garage': {get: CarController.garage},
+  '/car/login': {get: CarController.login},
+  '/car/callback': {get: CarController.callback},
 });
 
 export default router;
