@@ -2,7 +2,7 @@ import smartcar ,{Vehicle} from 'smartcar';
 import log from '../../logger';
 
 const {SMARTCAR_ID, SMARTCAR_SECRET, SMARTCAR_CALLBACK_URI, VEHICLE_ID} = process.env;
-const client = new smartcar.AuthClient({
+const auth = new smartcar.AuthClient({
   clientId: SMARTCAR_ID,
   clientSecret: SMARTCAR_SECRET,
   redirectUri: SMARTCAR_CALLBACK_URI || 'https://02b56390.ngrok.io/api/car/callback',
@@ -14,18 +14,19 @@ let credentials = {};
 
 
 class CarController {
+  refresh(){
+    auth
+  }
+
   login(req, res){
-    const link = client.getAuthUrl();
+    const link = auth.getAuthUrl();
     log.debug(`redirecting users to ${link}`);
     res.redirect(link);
   }
 
   async garage(req, res) {
-    const {accessToken} = credentials;
     try {
-      const ids = await smartcar.getVehicleIds(accessToken);
-      const cars = ids.map(id => new Vehicle(ids[0], accessToken).info());
-      res.json({succes: true, data: cars});
+      res.json({succes: true, data: []});
       return cars;
     } catch(err){
       log.error(err)
@@ -41,13 +42,18 @@ class CarController {
 
     try {
       log.debug(`Fetching access token from payload using code: ${code}`);
-      const access = await client.exchangeCode(code);
+      const access = await auth.exchangeCode(code);
       credentials = access;
       console.log(access);
-
       log.info('Successfully retrieved and configured the access token');
-      res.json("We successfully registered your vehicle, you can now close the the browser");
-      res.redirect('/api/car');
+
+      log.debug('Fetching list of all available cars.');
+      const ids = await smartcar.getVehicleIds(access.accessToken);
+
+      log.debug(`Found: ${ids.vehicles.join()}`);
+
+      const cars = ids.vehicles.map(id => new Vehicle(id, access.accessToken).info());
+      res.json({success: true, data: await Promise.all(cars)});
     } catch(err) {
       log.error(err)
       res.status(500).json({succes: false, err});
