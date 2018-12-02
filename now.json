@@ -1,7 +1,7 @@
 {
     "version": 1,
     "name": "pdui-sentry",
-    "alias": "pdui-sentry",
+    "alias": "pdui.now.sh",
     "type": "npm",
     "dotenv": true,
     "scale": {

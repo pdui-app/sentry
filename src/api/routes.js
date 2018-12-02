@@ -19,9 +19,11 @@ router.map({
     get: UserController.findById,
     // post: ''
   },
-  '/garage': {get: CarController.garage},
+  '/car': {get: CarController.garage},
+
   '/car/login': {get: CarController.login},
   '/car/callback': {get: CarController.callback},
+  '/car/lock': {get: CarController.lock}
 });
 
 export default router;
